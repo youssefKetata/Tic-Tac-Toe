@@ -102,3 +102,20 @@ select {
 
     }
 }
+
+.play_ground {
+    display: grid;
+    margin-block: 5rem;
+    grid-template-columns: repeat(3, 4rem);
+    width: fit-content;
+    margin-inline: auto;
+    gap: 5px;
+    background-color: greenyellow;
+}
+
+.box {
+    width: 4rem;
+    aspect-ratio: 1;
+    background-color: white;
+    overflow: hidden;
+}
