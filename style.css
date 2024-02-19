@@ -119,3 +119,8 @@ select {
     background-color: white;
     overflow: hidden;
 }
+
+/* animate .x class (x svg) */
+.x {
+    animation: x 1s infinite;
+}

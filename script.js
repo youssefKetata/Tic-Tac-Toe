@@ -26,6 +26,7 @@ let gameboard = (() => {
         }
         game.splice(indexOfBox, 1, 'x');
         event.target.innerHTML = x_svg;
+        event.target.classList.add('x');
     }
     let add_y = (indexOfBox, event) => {
         if (game[indexOfBox] !== undefined) {
@@ -71,6 +72,17 @@ let gameboard = (() => {
             }
         };
 
+        function animateWinner() {
+            let winner = checkWinner();
+            if (winner === 'x') {
+                console.log('player1 wins');
+            } else if (winner === 'o') {
+                console.log('player2 wins');
+            } else if (winner === 'tie') {
+                console.log('winner is ',winner);
+            }
+        }
+
         boxes.forEach(box => {
             let handler = clickHandler(box);
             box.addEventListener('click', handler);
@@ -108,9 +120,23 @@ let gameboard = (() => {
         }
     };
     return {
-        addListener
+        addListener,
+        game
     };
 }
 )()
+
+function resetGame(){
+    console.log('resetting');
+    let boxes = document.querySelectorAll('.box');
+    boxes.forEach(box => {
+        box.innerHTML = '';
+    });
+    gameboard.game.forEach((box, index) => {
+        gameboard.game[index] = undefined;
+    }
+    );
+    gameboard.addListener();
+}
 
 gameboard.addListener();
