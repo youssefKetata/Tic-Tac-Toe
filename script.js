@@ -1,10 +1,10 @@
-let x_svg = `    <svg aria-label="X" role="img" viewBox="0 0 128 128" style="visibility: visible;">
+let x_svg = `    <svg class='x' aria-label="X" role="img" viewBox="0 0 128 128" style="visibility: visible;">
 <path d="M16,16L112,112"
     style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0;"></path>
 <path class="hFJ9Ve" d="M112,16L16,112"
     style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0;"></path>
 </svg>`;
-let o_svg = ` <svg jsname="D7yUae" aria-label="O" role="img" viewBox="0 0 128 128" style="visibility: visible;">
+let o_svg = ` <svg class='x' jsname="D7yUae" aria-label="O" role="img" viewBox="0 0 128 128" style="visibility: visible;">
 <path class="hFJ9Ve" d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16"
     style="stroke: rgb(242, 235, 211); stroke-dasharray: 301.635; stroke-dashoffset: 0;"></path>
 </svg>`;
@@ -26,7 +26,6 @@ let gameboard = (() => {
         }
         game.splice(indexOfBox, 1, 'x');
         event.target.innerHTML = x_svg;
-        event.target.classList.add('x');
     }
     let add_y = (indexOfBox, event) => {
         if (game[indexOfBox] !== undefined) {

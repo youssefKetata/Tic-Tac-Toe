@@ -118,9 +118,35 @@ select {
     aspect-ratio: 1;
     background-color: white;
     overflow: hidden;
+    padding: 5px;
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    border: none;
+    height: 100%;
+    background-color: darkcyan;
+    color: white;
+    font-family: sans-serif;
+    font-size: larger;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 /* animate .x class (x svg) */
-.x {
+/* .x {
     animation: x 1s infinite;
 }
+
+@keyframes x {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+} */
