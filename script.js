@@ -1,4 +1,4 @@
-let x_svg = `    <svg class='x' aria-label="X" role="img" viewBox="0 0 128 128" style="visibility: visible;">
+let x_svg = `<svg class='x' aria-label="X" role="img" viewBox="0 0 128 128" style="visibility: visible;">
 <path d="M16,16L112,112"
     style="stroke: rgb(84, 84, 84); stroke-dasharray: 135.764; stroke-dashoffset: 0;"></path>
 <path class="hFJ9Ve" d="M112,16L16,112"
@@ -9,7 +9,6 @@ let o_svg = ` <svg class='x' jsname="D7yUae" aria-label="O" role="img" viewBox="
     style="stroke: rgb(242, 235, 211); stroke-dasharray: 301.635; stroke-dashoffset: 0;"></path>
 </svg>`;
 
-// have as little global code as possible. Try tucking as much as you can inside factories or modules
 let player = (name, role) => {
     return { name, role }
 }
@@ -19,103 +18,81 @@ let gameboard = (() => {
     let player2 = player('player2', 'o');
     let turn = player1;
     let game = new Array(9).fill(undefined);
+    let player1_display = document.querySelector('.player1');
+    let player2_display = document.querySelector('.player2');
 
-    let add_x = (indexOfBox, event) => {
-        if (game[indexOfBox] !== undefined) {
-            return;
-        }
+    let add_x = (indexOfBox, target) => {
         game.splice(indexOfBox, 1, 'x');
-        event.target.innerHTML = x_svg;
+        target.innerHTML = x_svg;
+        player1_display.classList.toggle('player_turn');
+        player2_display.classList.toggle('player_turn');
     }
-    let add_y = (indexOfBox, event) => {
-        if (game[indexOfBox] !== undefined) {
-            return;
-        }
+    let add_y = (indexOfBox, target) => {
         game.splice(indexOfBox, 1, 'o');
-        event.target.innerHTML = o_svg;
+        target.innerHTML = o_svg;
+        player1_display.classList.toggle('player_turn');
+        player2_display.classList.toggle('player_turn');
     }
-
-    /* 
-    the problem was that in order to remove event listeners, you need to have a reference to the function that was added as an event listener.
-    and sicne ClickHandler needed the event object, I had to wrap it in another function to pass the event object to it.
-    so we're passing each time a new funciton and can't remove it later.
-    the solution was 
-    */
 
     let addListener = () => {
         let boxes = document.querySelectorAll('.box');
-        let clickHandler = (box) => {
-            return (event) => {
-                let box_index = Array.from(boxes).indexOf(box);
-                if (turn === player1 && game[box_index] === undefined) {
-                    add_x(box_index, event);
-                    turn = player2;
-                } if (turn === player2 && game[box_index] === undefined) {
-                    add_y(box_index, event);
-                    turn = player1;
-                }
-                let winner = checkWinner();
-                if (winner !== undefined) {
-                    boxes.forEach(box => {
-                        box.removeEventListener('click', box.handler);
-                    });
-                    if (winner === 'x') {
-                        console.log('player1 wins');
-                    } else if (winner === 'o') {
-                        console.log('player2 wins');
-                    } else if (winner === 'tie') {
-                        console.log('winner is ',winner);
-                    }
-
-                }
+        let play_ground = document.querySelector('.play_ground');
+        let clickHandler = (event) => {
+            let box_index = Array.from(boxes).indexOf(event.target);
+            if (box_index >= 0 && turn === player1 && game[box_index] === undefined) {
+                add_x(box_index, event.target);
+                turn = player2;
+            } if (box_index >= 0 && turn === player2 && game[box_index] === undefined) {
+                add_y(box_index, event.target);
+                turn = player1;
             }
-        };
-
-        function animateWinner() {
             let winner = checkWinner();
-            if (winner === 'x') {
-                console.log('player1 wins');
-            } else if (winner === 'o') {
-                console.log('player2 wins');
-            } else if (winner === 'tie') {
-                console.log('winner is ',winner);
-            }
-        }
+            if (winner !== undefined) {
+                play_ground.removeEventListener('click', clickHandler);
+                let w = document.querySelector('.winner-box');
+                w.classList.add('winner');
+                w.innerHTML = winner === 'tie' ? 'Tie' : `${winner} wins`;
+                // remove the winner class after 3 seconds or user clikc on the screen
+                setTimeout(() => {
+                    w.classList.remove('winner');
+                    resetGame();
+                }, 3000);
 
-        boxes.forEach(box => {
-            let handler = clickHandler(box);
-            box.addEventListener('click', handler);
-            box.handler = handler;
-        });
+                if (winner === 'x') {
+                    console.log('player1 wins');
+                } else if (winner === 'o') {
+                    console.log('player2 wins');
+                } else if (winner === 'tie') {
+                    console.log('winner is ', winner);
+                }
+
+            }
+
+        };
+        play_ground.addEventListener('click', clickHandler);
     }
 
+    let winnCombo = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
     let checkWinner = () => {
-        if (game[0] === game[1] && game[1] === game[2]) {
-            return game[0];
-        }
-        if (game[3] === game[4] && game[4] === game[5]) {
-            return game[3];
-        }
-        if (game[6] === game[7] && game[7] === game[8]) {
-            return game[6];
-        }
-        if (game[0] === game[3] && game[3] === game[6]) {
-            return game[0];
-        }
-        if (game[1] === game[4] && game[4] === game[7]) {
-            return game[1];
-        }
-        if (game[2] === game[5] && game[5] === game[8]) {
-            return game[2];
-        }
-        if (game[0] === game[4] && game[4] === game[8]) {
-            return game[0];
-        }
-        if (game[2] === game[4] && game[4] === game[6]) {
-            return game[2];
-        }
-        if (game.every(box => box != undefined)) {
-            return 'tie';
+        for (let i = 0; i < winnCombo.length; i++) {
+            let combo = winnCombo[i];
+            if (game[combo[0]] === game[combo[1]] && game[combo[1]] === game[combo[2]] && game[combo[0]] !== undefined) {
+                return game[combo[0]];
+            } else if (game.every(box => box !== undefined)) {
+                return 'tie';
+            }
         }
     };
     return {
@@ -125,8 +102,7 @@ let gameboard = (() => {
 }
 )()
 
-function resetGame(){
-    console.log('resetting');
+function resetGame() {
     let boxes = document.querySelectorAll('.box');
     boxes.forEach(box => {
         box.innerHTML = '';
@@ -139,3 +115,7 @@ function resetGame(){
 }
 
 gameboard.addListener();
+//score
+//player vs ai
+//player name change
+//diffulties

@@ -11,19 +11,29 @@
 </head>
 
 <body>
+    <div class="game">
 
-    <div class="play_ground">
-        <div class="box"></div>
-        <div class="box"></div>
-        <div class="box"></div>
-        <div class="box"></div>
-        <div class="box"></div>
-        <div class="box"></div>
-        <div class="box"></div>
-        <div class="box"></div>
-        <div class="box"></div>
+        <div class="title">Tic Tac Toe</div>
+
+        <div class="players">
+            <span class="player player1 player_turn">Player 1</span>
+            <span class="player player2">Player 2</span>
+        </div>
+
+        <div class="play_ground">
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+        </div>
+        <div class="winner-box"></div>
+        <button class="btn btn-reset" onclick=resetGame()>reset</button>
     </div>
-    <button class="btn btn-reset" onclick=resetGame()>reset</button>
 </body>
 
 </html>
